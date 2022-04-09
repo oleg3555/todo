@@ -6,13 +6,13 @@ import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 
-type todolistType = {
+export type todolistType = {
     id: string,
     title: string,
     filter: filterType,
 }
 
-type tasksStateType = {
+export type tasksStateType = {
     [key: string]: Array<taskType>,
 }
 
@@ -77,6 +77,11 @@ function App() {
         setTasks({...tasks, [todolistId]: updatedTasks});
     }
 
+    const changeTodolistTitle = (todolistId: string, title: string) => {
+        const updatedTodolists = todolists.map(item => item.id === todolistId ? {...item, title} : item);
+        setTodolists(updatedTodolists);
+    }
+
 
     return (
         <div className="App">
@@ -118,6 +123,7 @@ function App() {
                                               removeTodolist={removeTodolist}
                                               changeTaskStatus={changeTaskStatus}
                                               changeFilter={changeFilter}
+                                              changeTodolistTitle={changeTodolistTitle}
                                               addTask={addTask}
                                               removeTask={removeTask}
                                               tasks={tasksForTodolist}

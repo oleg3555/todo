@@ -21,6 +21,7 @@ type propsType = {
     removeTodolist: (todolistId: string) => void,
     changeTaskTitle: (todolistId: string, taskId: string, title: string) => void,
     changeTaskStatus: (todolistId: string, taskId: string, value: boolean) => void,
+    changeTodolistTitle: (todolistId: string, title: string) => void,
     filter: filterType,
 }
 
@@ -38,16 +39,19 @@ export function Todolist(props: propsType) {
     const removeTodolistHandler = () => {
         props.removeTodolist(props.id);
     }
+    const changeTodolistTitle = (title: string) => {
+        props.changeTodolistTitle(props.id, title);
+    }
 
     return (
         <div>
             <Grid container>
-                <h3>{props.title}</h3>
+                <h3><EditableSpan title={props.title} changeTitle={changeTodolistTitle}/></h3>
                 <IconButton onClick={removeTodolistHandler}>
                     <DeleteForeverIcon/>
                 </IconButton>
             </Grid>
-            <div>
+            <div style={{margin: '0.5rem 0'}}>
                 <AddItemForm addItem={addTaskHandler}/>
             </div>
             {props.tasks.map(task => {
