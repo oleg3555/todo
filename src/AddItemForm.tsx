@@ -6,7 +6,7 @@ type propsType = {
     addItem: (title: string) => void;
 }
 
-export const AddItemForm = (props: propsType) => {
+export const AddItemForm = React.memo((props: propsType) => {
     const [inputValue, setInputValue] = useState<string>('');
     const [error, setError] = useState<string>('');
 
@@ -17,7 +17,9 @@ export const AddItemForm = (props: propsType) => {
     }
 
     const onChangeInputValue = (event: ChangeEvent<HTMLInputElement>) => {
-        setError('');
+        if (error) {
+            setError('');
+        }
         setInputValue(event.currentTarget.value);
     }
 
@@ -45,4 +47,4 @@ export const AddItemForm = (props: propsType) => {
             </IconButton>
         </div>
     )
-}
+});

@@ -7,7 +7,7 @@ type propsType = {
     changeTitle: (title: string) => void;
 }
 
-export const EditableSpan = (props: propsType) => {
+export const EditableSpan = React.memo((props: propsType) => {
     const [editMode, setEditMode] = useState<boolean>(false);
     const [inputValue, setInputValue] = useState<string>(props.title);
 
@@ -39,4 +39,4 @@ export const EditableSpan = (props: propsType) => {
                       onKeyPress={onKeyPressHandler}
                       onChange={onInputChangeHandler} autoFocus/>)
         : (<span onDoubleClick={enableEditMode}>{props.title}</span>);
-}
+})
