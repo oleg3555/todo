@@ -17,6 +17,7 @@
     "@types/react-dom": "^18.0.0",
     "@types/react-redux": "^7.1.23",
     "@types/uuid": "^8.3.4",
+    "axios": "^0.26.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.8",
@@ -31,7 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 6006 -s public",
+    "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
