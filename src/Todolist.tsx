@@ -7,13 +7,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/taskReducer";
 import {Task} from "./Task";
+import {filterType} from "./state/todolistReducer";
+import {TaskStatuses, taskType} from "./api/todolists-api";
 
-export type taskType = {
-    id: string,
-    title: string,
-    isDone: boolean,
-}
-export type filterType = 'all' | 'active' | 'completed';
 
 type propsType = {
     id: string,
@@ -31,9 +27,9 @@ export const Todolist = React.memo((props: propsType) => {
 
     let tasks = allTasks;
     if (props.filter === 'active') {
-        tasks = allTasks.filter(task => !task.isDone)
+        tasks = allTasks.filter(task => task.status !== TaskStatuses.Completed);
     } else if (props.filter === 'completed') {
-        tasks = allTasks.filter(task => task.isDone);
+        tasks = allTasks.filter(task => task.status === TaskStatuses.Completed);
     }
 
     const changeTodolistFilter = useCallback((event: MouseEvent<HTMLButtonElement>) => {
@@ -61,8 +57,8 @@ export const Todolist = React.memo((props: propsType) => {
         dispatch(changeTaskTitleAC(props.id, taskId, title));
     }, [dispatch, props.id]);
 
-    const changeTaskStatus = useCallback((taskId: string, isDone: boolean) => {
-        dispatch(changeTaskStatusAC(props.id, taskId, isDone));
+    const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses) => {
+        dispatch(changeTaskStatusAC(props.id, taskId, status));
     }, [dispatch, props.id]);
 
     return (

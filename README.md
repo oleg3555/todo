@@ -2,7 +2,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Technologies
 
-###Typescript, React, Redux, Storybook, Unit tests
+### `Typescript, React, Redux, Storybook, Unit tests`
 
 
 ## Available Scripts

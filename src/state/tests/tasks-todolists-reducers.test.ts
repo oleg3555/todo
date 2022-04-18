@@ -1,27 +1,87 @@
 import {v1} from "uuid";
-import {tasksStateType, todolistType} from "../../App";
-import {addTodolistAC, removeTodolistAC, todolistReducer} from "../todolistReducer";
+import {tasksStateType} from "../../App";
+import {addTodolistAC, removeTodolistAC, todolistReducer, TodolistType} from "../todolistReducer";
 import {taskReducer} from "../taskReducer";
+import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
+
+
+const testTaskId = v1();
+const todolistId1 = v1();
+const todolistId2 = v1();
+const todolists: Array<TodolistType> = [
+    {id: todolistId1, title: "What to learn", filter: "all", order: 0, addedDate: ''},
+    {id: todolistId2, title: "What to buy", filter: "all", order: 0, addedDate: ''},
+];
+
+const tasks: tasksStateType = {
+    [todolistId1]: [
+        {
+            id: v1(), title: "JS", status: TaskStatuses.Completed,
+            addedDate: '',
+            deadline: '',
+            description: '',
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            todoListId: 'tl1'
+        },
+        {
+            id: testTaskId, title: "React", status: TaskStatuses.New,
+            addedDate: '',
+            deadline: '',
+            description: '',
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            todoListId: 'tl1'
+        },
+        {
+            id: v1(), title: "Git", status: TaskStatuses.Completed,
+            addedDate: '',
+            deadline: '',
+            description: '',
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            todoListId: 'tl1'
+        }
+    ],
+    [todolistId2]: [
+        {
+            id: v1(), title: "Bread", status: TaskStatuses.New,
+            addedDate: '',
+            deadline: '',
+            description: '',
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            todoListId: 'tl2'
+        },
+        {
+            id: v1(), title: "Milk", status: TaskStatuses.New,
+            addedDate: '',
+            deadline: '',
+            description: '',
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            todoListId: 'tl2'
+        },
+        {
+            id: v1(), title: "Fish", status: TaskStatuses.Completed,
+            addedDate: '',
+            deadline: '',
+            description: '',
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: '',
+            todoListId: 'tl2'
+        }
+    ]
+}
+
 
 test("todolist and empty array of tasks should exist", () => {
-    const todolistId1 = v1();
-    const todolistId2 = v1();
-    const todolists: Array<todolistType> = [
-        {id: todolistId1, title: "What to learn", filter: "all"},
-        {id: todolistId2, title: "What to buy", filter: "all"}
-    ];
-    const tasks: tasksStateType = {
-        [todolistId1]: [
-            {id: v1(), title: "JS", isDone: true},
-            {id: v1(), title: "React", isDone: false},
-            {id: v1(), title: "Git", isDone: true}
-        ],
-        [todolistId2]: [
-            {id: v1(), title: "Bread", isDone: false},
-            {id: v1(), title: "Milk", isDone: false},
-            {id: v1(), title: "Fish", isDone: true}
-        ]
-    }
     const action = addTodolistAC("What");
     const endTListsState = todolistReducer(todolists, action);
     const endTasksState = taskReducer(tasks, action);
@@ -35,24 +95,6 @@ test("todolist and empty array of tasks should exist", () => {
 })
 
 test("array of tasks should be removed after deleting todolist", () => {
-    const todolistId1 = v1();
-    const todolistId2 = v1();
-    const todolists: Array<todolistType> = [
-        {id: todolistId1, title: "What to learn", filter: "all"},
-        {id: todolistId2, title: "What to buy", filter: "all"}
-    ];
-    const tasks: tasksStateType = {
-        [todolistId1]: [
-            {id: v1(), title: "JS", isDone: true},
-            {id: v1(), title: "React", isDone: false},
-            {id: v1(), title: "Git", isDone: true}
-        ],
-        [todolistId2]: [
-            {id: v1(), title: "Bread", isDone: false},
-            {id: v1(), title: "Milk", isDone: false},
-            {id: v1(), title: "Fish", isDone: true}
-        ]
-    }
     const action = removeTodolistAC(todolistId1);
     const endTListsState = todolistReducer(todolists, action);
     const endTasksState = taskReducer(tasks, action);
