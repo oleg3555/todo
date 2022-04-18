@@ -3,9 +3,10 @@ import {
     addTodolistAC,
     changeTodolistFilterAC,
     changeTodolistTitleAC,
-    removeTodolistAC,
+    removeTodolistAC, setTodolistsAC,
     todolistReducer, TodolistType
 } from "../todolistReducer";
+import {apiTodolistType} from "../../api/todolists-api";
 
 test("new todolist should be added", () => {
     const todolistId1 = v1();
@@ -58,4 +59,14 @@ test("correct todolist should change filter", () => {
     expect(endState[1].title).toBe("What to buy");
     expect(endState[0].filter).toBe("completed");
 
+})
+
+test('todolists should set to store', () => {
+    const todolists: Array<apiTodolistType> = [
+        {id: v1(), title: "What to learn", order: 0, addedDate: ''},
+        {id: v1(), title: "What to buy", order: 0, addedDate: ''}
+    ];
+    const endState=todolistReducer([],setTodolistsAC(todolists));
+    expect((endState.length)).toBe(2);
+    expect(endState[0].filter).toBeDefined();
 })

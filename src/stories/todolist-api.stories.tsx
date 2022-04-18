@@ -132,8 +132,8 @@ export const updateTask = () => {
             description: 'smth',
             status: 1,
             priority: 2,
-            startDate: null,
-            deadline: null,
+            startDate: '',
+            deadline: '',
         }
         const res = await todolistsAPI.updateTask(todolistId, taskId, updatedTask);
         setState(res.data);

@@ -1,14 +1,16 @@
-import React, {MouseEvent, useCallback} from "react";
+import React, {MouseEvent, useCallback, useEffect} from "react";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {Button, Grid, IconButton} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./state/store";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/taskReducer";
 import {Task} from "./Task";
 import {filterType} from "./state/todolistReducer";
 import {TaskStatuses, taskType} from "./api/todolists-api";
+import {fetchStateType} from "./state/fetchReducer";
+import {addTaskTC, changeTaskStatusTC, changeTaskTitleTC, removeTaskTC, setTasksTC} from "./state/thunk/tasks-thunk";
+import {Loading} from "./loader/Loading";
 
 
 type propsType = {
@@ -24,6 +26,11 @@ type propsType = {
 export const Todolist = React.memo((props: propsType) => {
     const dispatch = useDispatch();
     const allTasks = useSelector<AppRootStateType, Array<taskType>>(state => state.tasks[props.id]);
+    const {isFetching} = useSelector<AppRootStateType, fetchStateType>(state => state.fetch);
+
+    useEffect(() => {
+        dispatch(setTasksTC(props.id));
+    }, [])
 
     let tasks = allTasks;
     if (props.filter === 'active') {
@@ -46,23 +53,24 @@ export const Todolist = React.memo((props: propsType) => {
     }, [props.changeTodolistTitle, props.id]);
 
     const addTask = useCallback((title: string) => {
-        dispatch(addTaskAC(props.id, title));
+        dispatch(addTaskTC(props.id, title));
     }, [dispatch, props.id]);
 
     const removeTask = useCallback((taskId: string) => {
-        dispatch(removeTaskAC(props.id, taskId));
+        dispatch(removeTaskTC(props.id, taskId));
     }, [dispatch, props.id]);
 
     const changeTaskTitle = useCallback((taskId: string, title: string) => {
-        dispatch(changeTaskTitleAC(props.id, taskId, title));
+        dispatch(changeTaskTitleTC(props.id, taskId, title));
     }, [dispatch, props.id]);
 
     const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses) => {
-        dispatch(changeTaskStatusAC(props.id, taskId, status));
+        dispatch(changeTaskStatusTC(props.id, taskId, status));
     }, [dispatch, props.id]);
 
     return (
         <div>
+            {isFetching && <Loading/>}
             <Grid container>
                 <h3><EditableSpan title={props.title} changeTitle={changeTodolistTitle}/></h3>
                 <IconButton onClick={removeTodolist}>

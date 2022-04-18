@@ -35,12 +35,12 @@ export type taskType = {
     todoListId: string,
     order: number,
     addedDate: string,
-    description: string | null,
+    description: string,
     title: string,
     status: TaskStatuses,
     priority: TaskPriorities,
-    startDate: string | null,
-    deadline: string | null,
+    startDate: string,
+    deadline: string,
 }
 
 
@@ -60,13 +60,13 @@ type addTaskResponseType = ResponseType<{ item: taskType }> & {
     fieldsErrors: Array<string>,
 }
 
-type updatedTaskFields = {
+export type updatedTaskFields = {
     title: string,
-    description: string | null,
-    status: number,
-    priority: number,
-    startDate: string | null,
-    deadline: string | null,
+    description: string,
+    status: TaskStatuses,
+    priority: TaskPriorities,
+    startDate: string,
+    deadline: string,
 }
 
 type updateTaskResponseType = addTaskResponseType;

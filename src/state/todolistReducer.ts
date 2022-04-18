@@ -1,12 +1,12 @@
-import {v1} from "uuid";
 import {apiTodolistType} from "../api/todolists-api";
 
 export type addTodoType = ReturnType<typeof addTodolistAC>
 type changeTodoFilterType = ReturnType<typeof changeTodolistFilterAC>
 export type removeTodoType = ReturnType<typeof removeTodolistAC>
 type changeTodoTitleType = ReturnType<typeof changeTodolistTitleAC>
+export type setTodolistsType = ReturnType<typeof setTodolistsAC>
 
-type actionType = addTodoType | changeTodoFilterType | removeTodoType | changeTodoTitleType;
+type actionType = addTodoType | changeTodoFilterType | removeTodoType | changeTodoTitleType | setTodolistsType;
 
 
 export type filterType = 'all' | 'active' | 'completed';
@@ -16,12 +16,15 @@ export type TodolistType = apiTodolistType & {
 
 const initialState: Array<TodolistType> = [];
 
-export const todolistReducer = (state: Array<TodolistType> = initialState, action: actionType) => {
+export const todolistReducer = (state: Array<TodolistType> = initialState, action: actionType): Array<TodolistType> => {
     switch (action.type) {
+        case "SET-TODOLISTS": {
+            return action.payload.todolists.map(tl => ({...tl, filter: 'all'}));
+        }
         case 'ADD-TODOLIST': {
             const {id, title} = action.payload;
             const newTodolist: TodolistType = {id, title, filter: 'all', order: 0, addedDate: ''};
-            return [...state, newTodolist];
+            return [newTodolist, ...state];
         }
         case 'CHANGE-TODOLIST-FILTER': {
             const {id, filter} = action.payload;
@@ -42,8 +45,12 @@ export const todolistReducer = (state: Array<TodolistType> = initialState, actio
 }
 
 
-export const addTodolistAC = (title: string) => {
-    return {type: 'ADD-TODOLIST', payload: {id: v1(), title}} as const;
+export const setTodolistsAC = (todolists: Array<apiTodolistType>) => {
+    return {type: 'SET-TODOLISTS', payload: {todolists}} as const;
+}
+
+export const addTodolistAC = (id: string, title: string) => {
+    return {type: 'ADD-TODOLIST', payload: {id, title}} as const;
 }
 
 export const changeTodolistFilterAC = (id: string, filter: filterType) => {
