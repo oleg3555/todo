@@ -1,7 +1,7 @@
 import {v1} from "uuid";
 import {tasksStateType} from "../../App";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer} from "../taskReducer";
-import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
+import {TaskPriorities, TaskStatuses, taskType} from "../../api/todolists-api";
 
 const testTaskId = v1();
 
@@ -73,7 +73,19 @@ const startState: tasksStateType = {
 }
 
 test("new task should be added", () => {
-    const endState = taskReducer(startState, addTaskAC("tl2", "Beer"));
+    const task: taskType = {
+        id: '1',
+        title: 'Beer',
+        todoListId: 'tl2',
+        deadline: '',
+        description: '',
+        order: 0,
+        priority: TaskPriorities.Low,
+        startDate: '',
+        addedDate: '',
+        status: TaskStatuses.New
+    };
+    const endState = taskReducer(startState, addTaskAC(task));
     expect(endState["tl2"][0].status).toBe(TaskStatuses.New);
     expect(endState["tl2"][0].title).toBe("Beer");
     expect(endState["tl1"][1].status).toBe(TaskStatuses.New);

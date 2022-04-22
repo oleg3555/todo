@@ -22,8 +22,8 @@ export const todolistReducer = (state: Array<TodolistType> = initialState, actio
             return action.payload.todolists.map(tl => ({...tl, filter: 'all'}));
         }
         case 'ADD-TODOLIST': {
-            const {id, title} = action.payload;
-            const newTodolist: TodolistType = {id, title, filter: 'all', order: 0, addedDate: ''};
+            const {todolist} = action.payload;
+            const newTodolist: TodolistType = {...todolist, filter: 'all'};
             return [newTodolist, ...state];
         }
         case 'CHANGE-TODOLIST-FILTER': {
@@ -49,8 +49,8 @@ export const setTodolistsAC = (todolists: Array<apiTodolistType>) => {
     return {type: 'SET-TODOLISTS', payload: {todolists}} as const;
 }
 
-export const addTodolistAC = (id: string, title: string) => {
-    return {type: 'ADD-TODOLIST', payload: {id, title}} as const;
+export const addTodolistAC = (todolist: apiTodolistType) => {
+    return {type: 'ADD-TODOLIST', payload: {todolist}} as const;
 }
 
 export const changeTodolistFilterAC = (id: string, filter: filterType) => {

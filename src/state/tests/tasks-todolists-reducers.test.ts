@@ -2,7 +2,7 @@ import {v1} from "uuid";
 import {tasksStateType} from "../../App";
 import {addTodolistAC, removeTodolistAC, todolistReducer, TodolistType} from "../todolistReducer";
 import {taskReducer} from "../taskReducer";
-import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
+import {apiTodolistType, TaskPriorities, TaskStatuses} from "../../api/todolists-api";
 
 
 const testTaskId = v1();
@@ -82,16 +82,19 @@ const tasks: tasksStateType = {
 
 
 test("todolist and empty array of tasks should exist", () => {
-    const action = addTodolistAC("What");
+    const id=v1();
+    const newTodolist:apiTodolistType={id,title: "What", addedDate: '', order: 0}
+    const action = addTodolistAC(newTodolist);
     const endTListsState = todolistReducer(todolists, action);
     const endTasksState = taskReducer(tasks, action);
     const keys = Object.keys(endTasksState);
+    const {todolist}=action.payload;
 
-    expect(endTListsState[2].title).toBe("What");
-    expect(endTListsState[2].filter).toBe("all");
-    expect(endTasksState[action.payload.id].length).toBe(0);
+    expect(endTListsState[0].title).toBe("What");
+    expect(endTListsState[0].filter).toBe("all");
+    expect(endTasksState[todolist.id].length).toBe(0);
     expect(endTasksState[todolistId2].length).toBe(3);
-    expect(keys[2]).toBe(action.payload.id);
+    expect(keys[2]).toBe(todolist.id);
 })
 
 test("array of tasks should be removed after deleting todolist", () => {

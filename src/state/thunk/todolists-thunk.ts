@@ -22,7 +22,7 @@ export const createTodolistTC = (title: string) => {
         try {
             const response = await todolistsAPI.createTodolist(title);
             const {item} = response.data.data;
-            dispatch(addTodolistAC(item.id, title));
+            dispatch(addTodolistAC(item));
         } catch (error) {
             console.error(error);
         }

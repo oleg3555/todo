@@ -9,15 +9,15 @@ import {
 import {apiTodolistType} from "../../api/todolists-api";
 
 test("new todolist should be added", () => {
-    const todolistId1 = v1();
-    const todolistId2 = v1();
+    const id = v1();
     const startState: Array<TodolistType> = [
-        {id: todolistId1, title: "What to learn", filter: "all", addedDate: '', order: 0},
-        {id: todolistId2, title: "What to buy", filter: "all", addedDate: '', order: 0}
+        {id: v1(), title: "What to learn", filter: "all", addedDate: '', order: 0},
+        {id: v1(), title: "What to buy", filter: "all", addedDate: '', order: 0}
     ];
-    const endState = todolistReducer(startState, addTodolistAC("WHAT TO COOK"));
+    const newTodolist:apiTodolistType={id,title: "What to cook", addedDate: '', order: 0}
+    const endState = todolistReducer(startState, addTodolistAC(newTodolist));
     expect(endState.length).toBe(3);
-    expect(endState[2].title).toBe("WHAT TO COOK");
+    expect(endState[0].title).toBe("What to cook");
     expect(endState[0].filter).toBe("all");
 })
 

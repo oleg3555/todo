@@ -1,22 +1,7 @@
 import {Dispatch} from "redux";
-import {TaskPriorities, TaskStatuses, taskType, todolistsAPI, updatedTaskFields} from "../../api/todolists-api";
+import {TaskStatuses, taskType, todolistsAPI} from "../../api/todolists-api";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, setTasksAC} from "../taskReducer";
-
-const getUpdatedFields = (title: string = '',
-                          status: TaskStatuses = TaskStatuses.New,
-                          priority: TaskPriorities = TaskPriorities.Low,
-                          description: string = '',
-                          startDate: string = '',
-                          deadline: string = ''): updatedTaskFields => {
-    return {
-        title,
-        description,
-        status,
-        priority,
-        startDate,
-        deadline,
-    }
-}
+import {AppRootStateType} from "../store";
 
 
 export const setTasksTC = (todolistId: string) => {
@@ -36,7 +21,7 @@ export const addTaskTC = (todolistId: string, title: string) => {
         try {
             const response = await todolistsAPI.addTask(todolistId, title);
             const {item} = response.data.data;
-            dispatch(addTaskAC(todolistId, item.id, title));
+            dispatch(addTaskAC(item));
         } catch (error) {
             console.error(error);
         }
@@ -55,12 +40,15 @@ export const removeTaskTC = (todolistId: string, taskId: string) => {
 }
 
 export const changeTaskStatusTC = (todolistId: string, taskId: string, status: TaskStatuses) => {
-    return async (dispatch: Dispatch, getState: any) => {
+    return async (dispatch: Dispatch, getState: ()=>AppRootStateType) => {
         const {tasks} = getState();
         const task = tasks[todolistId].find((item: taskType) => item.id === taskId);
+        if(!task){
+            console.warn('Task is not found');
+            return;
+        }
         try {
-            const updatedFields = getUpdatedFields(task.title, status, task.priority, task.description, task.startDate, task.deadline);
-            await todolistsAPI.updateTask(todolistId, taskId, updatedFields)
+            await todolistsAPI.updateTask(todolistId, taskId, {...task, status});
             dispatch(changeTaskStatusAC(todolistId, taskId, status));
         } catch (error) {
             console.log(error);
@@ -69,12 +57,15 @@ export const changeTaskStatusTC = (todolistId: string, taskId: string, status: T
 }
 
 export const changeTaskTitleTC = (todolistId: string, taskId: string, title: string) => {
-    return async (dispatch: Dispatch, getState: any) => {
+    return async (dispatch: Dispatch, getState: ()=>AppRootStateType) => {
         const {tasks} = getState();
         const task = tasks[todolistId].find((item: taskType) => item.id === taskId);
+        if(!task){
+            console.warn('Task is not found');
+            return;
+        }
         try {
-            const updatedFields = getUpdatedFields(title, task.status, task.priority, task.description, task.startDate, task.deadline);
-            await todolistsAPI.updateTask(todolistId, taskId, updatedFields)
+            await todolistsAPI.updateTask(todolistId, taskId, {...task, title});
             dispatch(changeTaskTitleAC(todolistId, taskId, title));
         } catch (error) {
             console.log(error);
