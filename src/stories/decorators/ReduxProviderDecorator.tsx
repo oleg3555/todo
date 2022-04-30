@@ -1,17 +1,20 @@
-import {todolistReducer, TodolistType} from "../state/todolistReducer";
+import {todolistReducer, TodolistType} from "../../redux/reducers/todolistReducer";
 import {v1} from "uuid";
-import {tasksStateType} from "../App";
-import {combineReducers, createStore} from "redux";
-import {taskReducer} from "../state/taskReducer";
-import {AppRootStateType} from "../state/store";
+import {applyMiddleware, combineReducers, createStore} from "redux";
+import {taskReducer} from "../../redux/reducers/taskReducer";
+import {AppRootStateType} from "../../redux/store";
 import React from "react";
 import {Provider} from "react-redux";
-import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
+import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
+import {fetchReducer, fetchStateType} from "../../redux/reducers/fetchReducer";
+import thunk from "redux-thunk";
+import {tasksStateType} from "../../pages/Todolists/Todolists";
 
 
 type storeType = {
     tasks: tasksStateType,
     todolists: Array<TodolistType>,
+    fetch: fetchStateType,
 }
 
 const todolistId1 = v1();
@@ -99,15 +102,20 @@ const initGlobalStore: storeType = {
     todolists: [
         {id: todolistId1, title: 'What to learn', filter: 'all', order: 0, addedDate: ''},
         {id: todolistId2, title: 'What to buy', filter: 'all', order: 0, addedDate: ''},
-    ]
+    ],
+    fetch: {
+        error: '',
+        isFetching: false,
+    }
 }
 
 const rootReducer = combineReducers({
     tasks: taskReducer,
     todolists: todolistReducer,
+    fetch: fetchReducer,
 })
 
-const storyBookStore = createStore(rootReducer, initGlobalStore as AppRootStateType)
+const storyBookStore = createStore(rootReducer, initGlobalStore as AppRootStateType,applyMiddleware(thunk))
 
 export const ReduxProviderDecorator = (storyFn: any) => {
     return <Provider store={storyBookStore}>{storyFn()}</Provider>

@@ -1,5 +1,5 @@
-import App from "../App";
-import {ReduxProviderDecorator} from "./ReduxProviderDecorator";
+import App from "./App";
+import {ReduxProviderDecorator} from "../stories/decorators/ReduxProviderDecorator";
 import React from "react";
 
 export default {

@@ -1,8 +1,8 @@
 import {Checkbox, IconButton} from "@mui/material";
-import {EditableSpan} from "./EditableSpan";
+import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import React, {ChangeEvent, useCallback} from "react";
-import {TaskStatuses, taskType} from "./api/todolists-api";
+import {TaskStatuses, taskType} from "../../../../api/todolists-api";
 
 type propsType = {
     task: taskType,

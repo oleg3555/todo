@@ -1,16 +1,15 @@
 import React, {MouseEvent, useCallback, useEffect} from "react";
-import {AddItemForm} from "./AddItemForm";
-import {EditableSpan} from "./EditableSpan";
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {Button, Grid, IconButton} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./state/store";
-import {Task} from "./Task";
-import {filterType} from "./state/todolistReducer";
-import {TaskStatuses, taskType} from "./api/todolists-api";
-import {fetchStateType} from "./state/fetchReducer";
-import {addTaskTC, changeTaskStatusTC, changeTaskTitleTC, removeTaskTC, setTasksTC} from "./state/thunk/tasks-thunk";
-import {Loading} from "./loader/Loading";
+import {AppRootStateType} from "../../../redux/store";
+import {Task} from "./Task/Task";
+import {filterType} from "../../../redux/reducers/todolistReducer";
+import {TaskStatuses, taskType} from "../../../api/todolists-api";
+import {fetchStateType} from "../../../redux/reducers/fetchReducer";
+import {addTaskTC, changeTaskStatusTC, changeTaskTitleTC, removeTaskTC, setTasksTC} from "../../../redux/thunk/tasks-thunk";
 
 
 type propsType = {
@@ -70,7 +69,6 @@ export const Todolist = React.memo((props: propsType) => {
 
     return (
         <div>
-            {isFetching && <Loading/>}
             <Grid container>
                 <h3><EditableSpan title={props.title} changeTitle={changeTodolistTitle}/></h3>
                 <IconButton onClick={removeTodolist}>
