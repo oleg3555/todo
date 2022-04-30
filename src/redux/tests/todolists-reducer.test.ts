@@ -5,7 +5,7 @@ import {
     changeTodolistTitleAC,
     removeTodolistAC, setTodolistsAC,
     todolistReducer, TodolistType
-} from "../todolistReducer";
+} from "../reducers/todolistReducer";
 import {apiTodolistType} from "../../api/todolists-api";
 
 test("new todolist should be added", () => {

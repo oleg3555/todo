@@ -3,7 +3,7 @@ type disableLoaderType = ReturnType<typeof disableLoaderAC>
 type setErrorType = ReturnType<typeof setErrorAC>
 type disableErrorType = ReturnType<typeof disableErrorAC>
 
-type actionType = enableLoaderType | disableErrorType | disableLoaderType | setErrorType;
+export type fetchActionsType = enableLoaderType | disableErrorType | disableLoaderType | setErrorType;
 
 export type fetchStateType = {
     isFetching: boolean,
@@ -15,9 +15,10 @@ const initialState: fetchStateType = {
     error: '',
 };
 
-export const fetchReducer = (state: fetchStateType = initialState, action: actionType): fetchStateType => {
+export const fetchReducer = (state: fetchStateType = initialState, action: fetchActionsType): fetchStateType => {
     switch (action.type) {
         case 'ENABLE-LOADER': {
+            console.log('enable')
             return {...state, isFetching: true};
         }
         case 'DISABLE-LOADER': {

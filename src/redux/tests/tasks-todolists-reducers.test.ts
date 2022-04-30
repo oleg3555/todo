@@ -1,12 +1,20 @@
 import {v1} from "uuid";
-import {tasksStateType} from "../../App";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer} from "../taskReducer";
-import {TaskPriorities, TaskStatuses, taskType} from "../../api/todolists-api";
+import {addTodolistAC, removeTodolistAC, todolistReducer, TodolistType} from "../reducers/todolistReducer";
+import {taskReducer} from "../reducers/taskReducer";
+import {apiTodolistType, TaskPriorities, TaskStatuses} from "../../api/todolists-api";
+import {tasksStateType} from "../../pages/Todolists/Todolists";
+
 
 const testTaskId = v1();
+const todolistId1 = v1();
+const todolistId2 = v1();
+const todolists: Array<TodolistType> = [
+    {id: todolistId1, title: "What to learn", filter: "all", order: 0, addedDate: ''},
+    {id: todolistId2, title: "What to buy", filter: "all", order: 0, addedDate: ''},
+];
 
-const startState: tasksStateType = {
-    ["tl1"]: [
+const tasks: tasksStateType = {
+    [todolistId1]: [
         {
             id: v1(), title: "JS", status: TaskStatuses.Completed,
             addedDate: '',
@@ -38,7 +46,7 @@ const startState: tasksStateType = {
             todoListId: 'tl1'
         }
     ],
-    ["tl2"]: [
+    [todolistId2]: [
         {
             id: v1(), title: "Bread", status: TaskStatuses.New,
             addedDate: '',
@@ -72,43 +80,31 @@ const startState: tasksStateType = {
     ]
 }
 
-test("new task should be added", () => {
-    const task: taskType = {
-        id: '1',
-        title: 'Beer',
-        todoListId: 'tl2',
-        deadline: '',
-        description: '',
-        order: 0,
-        priority: TaskPriorities.Low,
-        startDate: '',
-        addedDate: '',
-        status: TaskStatuses.New
-    };
-    const endState = taskReducer(startState, addTaskAC(task));
-    expect(endState["tl2"][0].status).toBe(TaskStatuses.New);
-    expect(endState["tl2"][0].title).toBe("Beer");
-    expect(endState["tl1"][1].status).toBe(TaskStatuses.New);
+
+test("todolist and empty array of tasks should exist", () => {
+    const id=v1();
+    const newTodolist:apiTodolistType={id,title: "What", addedDate: '', order: 0}
+    const action = addTodolistAC(newTodolist);
+    const endTListsState = todolistReducer(todolists, action);
+    const endTasksState = taskReducer(tasks, action);
+    const keys = Object.keys(endTasksState);
+    const {todolist}=action.payload;
+
+    expect(endTListsState[0].title).toBe("What");
+    expect(endTListsState[0].filter).toBe("all");
+    expect(endTasksState[todolist.id].length).toBe(0);
+    expect(endTasksState[todolistId2].length).toBe(3);
+    expect(keys[2]).toBe(todolist.id);
 })
 
-test("correct task should be removed", () => {
-    const endState = taskReducer(startState, removeTaskAC("tl1", testTaskId));
-    expect(endState["tl1"].length).toBe(2);
-    expect(endState["tl2"].length).toBe(3);
-    expect(endState["tl1"][1].title).toBe("Git");
+test("array of tasks should be removed after deleting todolist", () => {
+    const action = removeTodolistAC(todolistId1);
+    const endTListsState = todolistReducer(todolists, action);
+    const endTasksState = taskReducer(tasks, action);
+    const keys = Object.keys(endTasksState);
 
-})
-
-test("correct task should change status", () => {
-    const endState = taskReducer(startState, changeTaskStatusAC("tl1", testTaskId, TaskStatuses.Completed));
-    expect(endState["tl1"][1].status).toBe(TaskStatuses.Completed);
-    expect(endState["tl1"].length).toBe(3);
-    expect(endState["tl2"].length).toBe(3);
-})
-
-test("correct task should change title", () => {
-    const endState = taskReducer(startState, changeTaskTitleAC("tl1", testTaskId, "Gitlab"));
-    expect(endState["tl1"][1].title).toBe("Gitlab");
-    expect(endState["tl1"].length).toBe(3);
-    expect(endState["tl2"].length).toBe(3);
+    expect(endTListsState[0].title).toBe("What to buy");
+    expect(endTListsState.length).toBe(1);
+    expect(keys.length).toBe(1);
+    expect(endTasksState[todolistId2].length).toBe(3);
 })

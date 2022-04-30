@@ -1,11 +1,18 @@
 import {Dispatch} from "redux";
 import {TaskStatuses, taskType, todolistsAPI} from "../../api/todolists-api";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, setTasksAC} from "../taskReducer";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    setTasksAC,
+    taskActionsType
+} from "../reducers/taskReducer";
 import {AppRootStateType} from "../store";
 
 
 export const setTasksTC = (todolistId: string) => {
-    return async (dispatch: Dispatch) => {
+    return async (dispatch: Dispatch<taskActionsType>) => {
         try {
             const response = await todolistsAPI.getTasks(todolistId);
             const {items} = response.data;
@@ -17,7 +24,7 @@ export const setTasksTC = (todolistId: string) => {
 }
 
 export const addTaskTC = (todolistId: string, title: string) => {
-    return async (dispatch: Dispatch) => {
+    return async (dispatch: Dispatch<taskActionsType>) => {
         try {
             const response = await todolistsAPI.addTask(todolistId, title);
             const {item} = response.data.data;
@@ -29,7 +36,7 @@ export const addTaskTC = (todolistId: string, title: string) => {
 }
 
 export const removeTaskTC = (todolistId: string, taskId: string) => {
-    return async (dispatch: Dispatch) => {
+    return async (dispatch: Dispatch<taskActionsType>) => {
         try {
             await todolistsAPI.removeTask(todolistId, taskId);
             dispatch(removeTaskAC(todolistId, taskId));
@@ -40,10 +47,10 @@ export const removeTaskTC = (todolistId: string, taskId: string) => {
 }
 
 export const changeTaskStatusTC = (todolistId: string, taskId: string, status: TaskStatuses) => {
-    return async (dispatch: Dispatch, getState: ()=>AppRootStateType) => {
+    return async (dispatch: Dispatch<taskActionsType>, getState: () => AppRootStateType) => {
         const {tasks} = getState();
         const task = tasks[todolistId].find((item: taskType) => item.id === taskId);
-        if(!task){
+        if (!task) {
             console.warn('Task is not found');
             return;
         }
@@ -57,10 +64,10 @@ export const changeTaskStatusTC = (todolistId: string, taskId: string, status: T
 }
 
 export const changeTaskTitleTC = (todolistId: string, taskId: string, title: string) => {
-    return async (dispatch: Dispatch, getState: ()=>AppRootStateType) => {
+    return async (dispatch: Dispatch<taskActionsType>, getState: () => AppRootStateType) => {
         const {tasks} = getState();
         const task = tasks[todolistId].find((item: taskType) => item.id === taskId);
-        if(!task){
+        if (!task) {
             console.warn('Task is not found');
             return;
         }

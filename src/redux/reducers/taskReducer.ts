@@ -1,6 +1,6 @@
-import {tasksStateType} from "../App";
 import {addTodoType, removeTodoType, setTodolistsType} from "./todolistReducer";
-import {TaskStatuses, taskType} from "../api/todolists-api";
+import {TaskStatuses, taskType} from "../../api/todolists-api";
+import {tasksStateType} from "../../pages/Todolists/Todolists";
 
 type addTaskType = ReturnType<typeof addTaskAC>
 type removeTaskType = ReturnType<typeof removeTaskAC>
@@ -8,7 +8,7 @@ type changeTaskTitleType = ReturnType<typeof changeTaskTitleAC>
 type changeTaskStatusType = ReturnType<typeof changeTaskStatusAC>
 type setTasksType = ReturnType<typeof setTasksAC>
 
-type actionType =
+export type taskActionsType =
     addTaskType
     | removeTaskType
     | setTasksType
@@ -21,7 +21,7 @@ type actionType =
 
 const initialState: tasksStateType = {};
 
-export const taskReducer = (state: tasksStateType = initialState, action: actionType): tasksStateType => {
+export const taskReducer = (state: tasksStateType = initialState, action: taskActionsType): tasksStateType => {
     switch (action.type) {
         case "SET-TODOLISTS": {
             const {todolists} = action.payload;

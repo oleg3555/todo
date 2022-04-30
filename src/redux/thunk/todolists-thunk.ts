@@ -1,10 +1,16 @@
 import {Dispatch} from "redux";
 import {todolistsAPI} from "../../api/todolists-api";
-import {addTodolistAC, changeTodolistTitleAC, removeTodolistAC, setTodolistsAC} from "../todolistReducer";
-import {disableLoaderAC, enableLoaderAC} from "../fetchReducer";
+import {
+    addTodolistAC,
+    changeTodolistTitleAC,
+    removeTodolistAC,
+    setTodolistsAC,
+    todolistActionsType
+} from "../reducers/todolistReducer";
+import {disableLoaderAC, enableLoaderAC, fetchActionsType} from "../reducers/fetchReducer";
 
 export const setTodolistsTC = () => {
-    return async (dispatch: Dispatch) => {
+    return async (dispatch: Dispatch<todolistActionsType | fetchActionsType>) => {
         dispatch(enableLoaderAC());
         try {
             const response = await todolistsAPI.getTodolists();
@@ -17,7 +23,7 @@ export const setTodolistsTC = () => {
 }
 
 export const createTodolistTC = (title: string) => {
-    return async (dispatch: Dispatch) => {
+    return async (dispatch: Dispatch<todolistActionsType | fetchActionsType>) => {
         dispatch(enableLoaderAC());
         try {
             const response = await todolistsAPI.createTodolist(title);
@@ -31,7 +37,7 @@ export const createTodolistTC = (title: string) => {
 }
 
 export const removeTodolistTC = (todolistId: string) => {
-    return async (dispatch: Dispatch) => {
+    return async (dispatch: Dispatch<todolistActionsType | fetchActionsType>) => {
         dispatch(enableLoaderAC());
         try {
             await todolistsAPI.removeTodolist(todolistId);
@@ -44,7 +50,7 @@ export const removeTodolistTC = (todolistId: string) => {
 }
 
 export const changeTodolistTitleTC = (todolistId: string, title: string) => {
-    return async (dispatch: Dispatch) => {
+    return async (dispatch: Dispatch<todolistActionsType | fetchActionsType>) => {
         dispatch(enableLoaderAC());
         try {
             await todolistsAPI.updateTodolist(todolistId, title);
