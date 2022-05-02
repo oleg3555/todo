@@ -3,11 +3,13 @@ import './App.css';
 import {AppBar, Button, Container, IconButton, Toolbar, Typography} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {Todolists} from "../pages/Todolists/Todolists";
+import {ErrorToast} from "../components/Toasts/ErrorToast";
 
 function App() {
     return (
         <div className="App">
             <AppBar position="static">
+                <ErrorToast/>
                 <Toolbar>
                     <IconButton
                         size="large"
