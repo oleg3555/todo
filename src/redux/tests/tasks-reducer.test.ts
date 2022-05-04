@@ -1,7 +1,7 @@
 import {v1} from "uuid";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer} from "../reducers/taskReducer";
-import {TaskPriorities, TaskStatuses, taskType} from "../../api/todolists-api";
-import {tasksStateType} from "../../pages/Todolists/Todolists";
+import {TaskPriorities, TaskStatuses, apiTaskType} from "../../api/todolists-api";
+import {tasksStateType, taskType} from "../../pages/Todolists/Todolists";
 
 const testTaskId = v1();
 
@@ -15,7 +15,8 @@ const startState: tasksStateType = {
             order: 0,
             priority: TaskPriorities.Low,
             startDate: '',
-            todoListId: 'tl1'
+            todoListId: 'tl1',
+            fetchStatus: 'idle',
         },
         {
             id: testTaskId, title: "React", status: TaskStatuses.New,
@@ -25,7 +26,8 @@ const startState: tasksStateType = {
             order: 0,
             priority: TaskPriorities.Low,
             startDate: '',
-            todoListId: 'tl1'
+            todoListId: 'tl1',
+            fetchStatus: 'idle',
         },
         {
             id: v1(), title: "Git", status: TaskStatuses.Completed,
@@ -35,7 +37,8 @@ const startState: tasksStateType = {
             order: 0,
             priority: TaskPriorities.Low,
             startDate: '',
-            todoListId: 'tl1'
+            todoListId: 'tl1',
+            fetchStatus: 'idle',
         }
     ],
     ["tl2"]: [
@@ -47,7 +50,8 @@ const startState: tasksStateType = {
             order: 0,
             priority: TaskPriorities.Low,
             startDate: '',
-            todoListId: 'tl2'
+            todoListId: 'tl2',
+            fetchStatus: 'idle',
         },
         {
             id: v1(), title: "Milk", status: TaskStatuses.New,
@@ -57,7 +61,8 @@ const startState: tasksStateType = {
             order: 0,
             priority: TaskPriorities.Low,
             startDate: '',
-            todoListId: 'tl2'
+            todoListId: 'tl2',
+            fetchStatus: 'idle',
         },
         {
             id: v1(), title: "Fish", status: TaskStatuses.Completed,
@@ -67,7 +72,8 @@ const startState: tasksStateType = {
             order: 0,
             priority: TaskPriorities.Low,
             startDate: '',
-            todoListId: 'tl2'
+            todoListId: 'tl2',
+            fetchStatus: 'idle',
         }
     ]
 }
@@ -83,7 +89,8 @@ test("new task should be added", () => {
         priority: TaskPriorities.Low,
         startDate: '',
         addedDate: '',
-        status: TaskStatuses.New
+        status: TaskStatuses.New,
+        fetchStatus:'idle',
     };
     const endState = taskReducer(startState, addTaskAC(task));
     expect(endState["tl2"][0].status).toBe(TaskStatuses.New);

@@ -1,12 +1,14 @@
 import {addTodoType, removeTodoType, setTodolistsType} from "./todolistReducer";
-import {TaskStatuses, taskType} from "../../api/todolists-api";
-import {tasksStateType} from "../../pages/Todolists/Todolists";
+import {apiTaskType, TaskStatuses} from "../../api/todolists-api";
+import {tasksStateType, taskType} from "../../pages/Todolists/Todolists";
 
 type addTaskType = ReturnType<typeof addTaskAC>
 type removeTaskType = ReturnType<typeof removeTaskAC>
 type changeTaskTitleType = ReturnType<typeof changeTaskTitleAC>
 type changeTaskStatusType = ReturnType<typeof changeTaskStatusAC>
 type setTasksType = ReturnType<typeof setTasksAC>
+type changeTaskFetchStatus = ReturnType<typeof changeTaskFetchStatusAC>
+export type taskFetchStatus = 'updating' | 'removing' | 'idle' | 'failed';
 
 export type taskActionsType =
     addTaskType
@@ -15,6 +17,7 @@ export type taskActionsType =
     | changeTaskTitleType
     | changeTaskStatusType
     | addTodoType
+    | changeTaskFetchStatus
     | setTodolistsType
     | removeTodoType;
 
@@ -33,11 +36,11 @@ export const taskReducer = (state: tasksStateType = initialState, action: taskAc
         }
         case "SET-TASKS": {
             const {tasks, todoListId} = action.payload;
-            return {...state, [todoListId]: tasks};
+            return {...state, [todoListId]: tasks.map(task => ({...task, fetchStatus: 'idle'}))};
         }
         case 'ADD-TASK': {
             const {task} = action.payload;
-            const updatedTasks = [task, ...state[task.todoListId]];
+            const updatedTasks: Array<taskType> = [{...task, fetchStatus: 'idle'}, ...state[task.todoListId]];
             return {...state, [task.todoListId]: updatedTasks};
         }
         case 'REMOVE-TASK': {
@@ -65,17 +68,27 @@ export const taskReducer = (state: tasksStateType = initialState, action: taskAc
             delete copyState[id];
             return copyState;
         }
+        case "CHANGE-TASK-FETCH-STATUS": {
+            const {todoListId, taskId, fetchStatus} = action.payload;
+            const updatedTasks = state[todoListId].map(item => item.id === taskId ? {...item, fetchStatus} : item);
+            return {...state, [todoListId]: updatedTasks};
+        }
         default: {
             return state;
         }
     }
 }
 
-export const setTasksAC = (todoListId: string, tasks: Array<taskType>) => {
+
+export const changeTaskFetchStatusAC = (todoListId: string, taskId: string, fetchStatus: taskFetchStatus) => {
+    return {type: 'CHANGE-TASK-FETCH-STATUS', payload: {todoListId, taskId, fetchStatus}} as const;
+}
+
+export const setTasksAC = (todoListId: string, tasks: Array<apiTaskType>) => {
     return {type: 'SET-TASKS', payload: {todoListId, tasks}} as const;
 }
 
-export const addTaskAC = (task: taskType) => {
+export const addTaskAC = (task: apiTaskType) => {
     return {type: 'ADD-TASK', payload: {task}} as const;
 }
 

@@ -20,6 +20,7 @@ export const EditableSpan = React.memo((props: propsType) => {
         if (newTitle) {
             props.changeTitle(newTitle);
             setEditMode(false);
+            setInputValue(props.title);
         }
     }
 

@@ -8,8 +8,8 @@ import {ErrorToast} from "../components/Toasts/ErrorToast";
 function App() {
     return (
         <div className="App">
+            <ErrorToast/>
             <AppBar position="static">
-                <ErrorToast/>
                 <Toolbar>
                     <IconButton
                         size="large"

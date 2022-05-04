@@ -7,9 +7,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../../redux/store";
 import {Task} from "./Task/Task";
 import {filterType} from "../../../redux/reducers/todolistReducer";
-import {TaskStatuses, taskType} from "../../../api/todolists-api";
-import {fetchStateType} from "../../../redux/reducers/fetchReducer";
+import {TaskStatuses} from "../../../api/todolists-api";
 import {addTaskTC, changeTaskStatusTC, changeTaskTitleTC, removeTaskTC, setTasksTC} from "../../../redux/thunk/tasks-thunk";
+import {taskType} from "../Todolists";
 
 
 type propsType = {
@@ -25,7 +25,6 @@ type propsType = {
 export const Todolist = React.memo((props: propsType) => {
     const dispatch = useDispatch();
     const allTasks = useSelector<AppRootStateType, Array<taskType>>(state => state.tasks[props.id]);
-    const {isFetching} = useSelector<AppRootStateType, fetchStateType>(state => state.fetch);
 
     useEffect(() => {
         dispatch(setTasksTC(props.id));

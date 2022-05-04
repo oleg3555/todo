@@ -2,12 +2,12 @@ import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 import thunk from 'redux-thunk'
 import {todolistReducer} from "./reducers/todolistReducer";
 import {taskReducer} from "./reducers/taskReducer";
-import {fetchReducer} from "./reducers/fetchReducer";
+import {appStatusReducer} from "./reducers/appStatusReducer";
 
 const rootReducer = combineReducers({
     todolists: todolistReducer,
     tasks: taskReducer,
-    fetch:fetchReducer,
+    app:appStatusReducer,
 })
 
 export type AppRootStateType = ReturnType<typeof rootReducer>;

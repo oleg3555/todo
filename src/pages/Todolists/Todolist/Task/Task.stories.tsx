@@ -2,13 +2,14 @@ import React from 'react';
 import {Task} from "./Task";
 import {action} from "@storybook/addon-actions";
 import {TaskPriorities, TaskStatuses} from "../../../../api/todolists-api";
+import {taskType} from "../../Todolists";
 
 export default {
     title: 'Task',
     component: Task,
 }
 
-const task1 = {
+const task1: taskType = {
     id: '1', title: 'TypeScript', status: TaskStatuses.New,
     addedDate: '',
     deadline: '',
@@ -17,8 +18,9 @@ const task1 = {
     priority: TaskPriorities.High,
     startDate: '',
     todoListId: '11',
+    fetchStatus: 'idle',
 }
-const task2 = {
+const task2: taskType = {
     id: '2', title: 'React', status: TaskStatuses.Completed,
     addedDate: '',
     deadline: '',
@@ -27,6 +29,7 @@ const task2 = {
     priority: TaskPriorities.High,
     startDate: '',
     todoListId: '22',
+    fetchStatus: 'idle',
 }
 
 const removeTaskCallback = action('Task removed');

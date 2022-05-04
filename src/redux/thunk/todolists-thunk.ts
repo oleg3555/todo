@@ -7,24 +7,24 @@ import {
     setTodolistsAC,
     todolistActionsType
 } from "../reducers/todolistReducer";
-import {disableLoaderAC, enableLoaderAC, fetchActionsType} from "../reducers/fetchReducer";
+import {disableAppLoaderAC, enableAppLoaderAC, appStatusActionsType} from "../reducers/appStatusReducer";
 
 export const setTodolistsTC = () => {
-    return async (dispatch: Dispatch<todolistActionsType | fetchActionsType>) => {
-        dispatch(enableLoaderAC());
+    return async (dispatch: Dispatch<todolistActionsType | appStatusActionsType>) => {
+        dispatch(enableAppLoaderAC());
         try {
             const response = await todolistsAPI.getTodolists();
             dispatch(setTodolistsAC(response.data));
         } catch (error) {
             console.error(error);
         }
-        dispatch(disableLoaderAC());
+        dispatch(disableAppLoaderAC());
     }
 }
 
 export const createTodolistTC = (title: string) => {
-    return async (dispatch: Dispatch<todolistActionsType | fetchActionsType>) => {
-        dispatch(enableLoaderAC());
+    return async (dispatch: Dispatch<todolistActionsType | appStatusActionsType>) => {
+        dispatch(enableAppLoaderAC());
         try {
             const response = await todolistsAPI.createTodolist(title);
             const {item} = response.data.data;
@@ -32,32 +32,32 @@ export const createTodolistTC = (title: string) => {
         } catch (error) {
             console.error(error);
         }
-        dispatch(disableLoaderAC());
+        dispatch(disableAppLoaderAC());
     }
 }
 
 export const removeTodolistTC = (todolistId: string) => {
-    return async (dispatch: Dispatch<todolistActionsType | fetchActionsType>) => {
-        dispatch(enableLoaderAC());
+    return async (dispatch: Dispatch<todolistActionsType | appStatusActionsType>) => {
+        dispatch(enableAppLoaderAC());
         try {
             await todolistsAPI.removeTodolist(todolistId);
             dispatch(removeTodolistAC(todolistId));
         } catch (error) {
             console.error(error);
         }
-        dispatch(disableLoaderAC());
+        dispatch(disableAppLoaderAC());
     }
 }
 
 export const changeTodolistTitleTC = (todolistId: string, title: string) => {
-    return async (dispatch: Dispatch<todolistActionsType | fetchActionsType>) => {
-        dispatch(enableLoaderAC());
+    return async (dispatch: Dispatch<todolistActionsType | appStatusActionsType>) => {
+        dispatch(enableAppLoaderAC());
         try {
             await todolistsAPI.updateTodolist(todolistId, title);
             dispatch(changeTodolistTitleAC(todolistId, title));
         } catch (error) {
             console.error(error);
         }
-        dispatch(disableLoaderAC());
+        dispatch(disableAppLoaderAC());
     }
 }

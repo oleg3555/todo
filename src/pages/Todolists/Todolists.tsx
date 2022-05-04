@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../redux/store";
 import {changeTodolistFilterAC, filterType, TodolistType} from "../../redux/reducers/todolistReducer";
-import {fetchStateType} from "../../redux/reducers/fetchReducer";
+import {appStatusStateType} from "../../redux/reducers/appStatusReducer";
 import React, {useCallback, useEffect} from "react";
 import {
     changeTodolistTitleTC,
@@ -12,8 +12,13 @@ import {
 import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
-import {taskType} from "../../api/todolists-api";
+import {apiTaskType} from "../../api/todolists-api";
 import {Loading} from "../../loader/Loading";
+import {taskFetchStatus} from "../../redux/reducers/taskReducer";
+
+export type taskType = apiTaskType & {
+    fetchStatus: taskFetchStatus
+}
 
 export type tasksStateType = {
     [key: string]: Array<taskType>,
@@ -23,7 +28,7 @@ export type tasksStateType = {
 export function Todolists() {
     const dispatch = useDispatch();
     const todolists = useSelector<AppRootStateType, Array<TodolistType>>(state => state.todolists);
-    const {isFetching} = useSelector<AppRootStateType, fetchStateType>(state => state.fetch);
+    const {isFetching} = useSelector<AppRootStateType, appStatusStateType>(state => state.app);
 
     useEffect(() => {
         dispatch(setTodolistsTC());

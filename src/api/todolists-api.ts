@@ -30,7 +30,7 @@ export enum TaskPriorities {
     Later = 4,
 }
 
-export type taskType = {
+export type apiTaskType = {
     id: string,
     todoListId: string,
     order: number,
@@ -44,7 +44,7 @@ export type taskType = {
 }
 
 
-type ResponseType<D = {}> = {
+export type ResponseType<D = {}> = {
     resultCode: number,
     messages: Array<string>,
     data: D,
@@ -53,10 +53,10 @@ type ResponseType<D = {}> = {
 type getTasksResponseType = {
     error: string | null,
     totalCount: number,
-    items: Array<taskType>,
+    items: Array<apiTaskType>,
 }
 
-type addTaskResponseType = ResponseType<{ item: taskType }> & {
+type addTaskResponseType = ResponseType<{ item: apiTaskType }> & {
     fieldsErrors: Array<string>,
 }
 
