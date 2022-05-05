@@ -2,19 +2,28 @@ import React, {MouseEvent, useCallback, useEffect} from "react";
 import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
 import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import {Button, Grid, IconButton} from "@mui/material";
+import {Button, CircularProgress, Grid, IconButton} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../../redux/store";
 import {Task} from "./Task/Task";
 import {filterType} from "../../../redux/reducers/todolistReducer";
 import {TaskStatuses} from "../../../api/todolists-api";
-import {addTaskTC, changeTaskStatusTC, changeTaskTitleTC, removeTaskTC, setTasksTC} from "../../../redux/thunk/tasks-thunk";
+import {
+    addTaskTC,
+    changeTaskStatusTC,
+    changeTaskTitleTC,
+    removeTaskTC,
+    setTasksTC
+} from "../../../redux/thunk/tasks-thunk";
 import {taskType} from "../Todolists";
+import {itemFetchStatus} from "../../../redux/reducers/taskReducer";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 
 type propsType = {
     id: string,
     title: string,
+    fetchStatus: itemFetchStatus,
     changeTodolistFilter: (todolistId: string, value: filterType) => void,
     removeTodolist: (todolistId: string) => void,
     changeTodolistTitle: (todolistId: string, title: string) => void,
@@ -66,13 +75,28 @@ export const Todolist = React.memo((props: propsType) => {
         dispatch(changeTaskStatusTC(props.id, taskId, status));
     }, [dispatch, props.id]);
 
+    const getStatusItem = (status: itemFetchStatus) => {
+        if (status === 'idle') {
+            return (<IconButton onClick={removeTodolist}>
+                <DeleteForeverIcon/>
+            </IconButton>);
+        } else if (status === 'failed') {
+            return <ErrorOutlineIcon/>;
+        } else {
+            return <CircularProgress/>;
+        }
+    }
+
     return (
-        <div>
-            <Grid container>
-                <h3><EditableSpan title={props.title} changeTitle={changeTodolistTitle}/></h3>
-                <IconButton onClick={removeTodolist}>
-                    <DeleteForeverIcon/>
-                </IconButton>
+        <div className={(props.fetchStatus === 'failed' || props.fetchStatus === 'removing') ? 'disabled' : undefined}>
+            <Grid container direction="row" alignItems="center" spacing={1}>
+                <Grid item>
+                    <h3 className={props.fetchStatus === 'updating' ? 'disabled' : undefined}><EditableSpan
+                        title={props.title} changeTitle={changeTodolistTitle}/></h3>
+                </Grid>
+                <Grid item>
+                    {getStatusItem(props.fetchStatus)}
+                </Grid>
             </Grid>
             <div style={{margin: '0.5rem 0'}}>
                 <AddItemForm addItem={addTask}/>

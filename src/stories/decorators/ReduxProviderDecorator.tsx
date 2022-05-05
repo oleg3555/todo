@@ -34,7 +34,7 @@ const initGlobalStore: storeType = {
                 priority: TaskPriorities.Middle,
                 startDate: '',
                 todoListId: todolistId1,
-                fetchStatus:'idle',
+                fetchStatus: 'idle',
             },
             {
                 id: v1(),
@@ -47,7 +47,7 @@ const initGlobalStore: storeType = {
                 priority: TaskPriorities.High,
                 startDate: '',
                 todoListId: todolistId1,
-                fetchStatus:'idle',
+                fetchStatus: 'idle',
             },
             {
                 id: v1(),
@@ -60,7 +60,7 @@ const initGlobalStore: storeType = {
                 priority: TaskPriorities.Low,
                 startDate: '',
                 todoListId: todolistId1,
-                fetchStatus:'idle',
+                fetchStatus: 'idle',
             },
         ],
         [todolistId2]: [
@@ -75,7 +75,7 @@ const initGlobalStore: storeType = {
                 priority: TaskPriorities.Low,
                 startDate: '',
                 todoListId: todolistId2,
-                fetchStatus:'idle',
+                fetchStatus: 'idle',
             },
             {
                 id: v1(),
@@ -88,7 +88,7 @@ const initGlobalStore: storeType = {
                 priority: TaskPriorities.Middle,
                 startDate: '',
                 todoListId: todolistId2,
-                fetchStatus:'idle',
+                fetchStatus: 'idle',
             },
             {
                 id: v1(),
@@ -101,13 +101,13 @@ const initGlobalStore: storeType = {
                 priority: TaskPriorities.High,
                 startDate: '',
                 todoListId: todolistId2,
-                fetchStatus:'idle',
+                fetchStatus: 'idle',
             },
         ]
     },
     todolists: [
-        {id: todolistId1, title: 'What to learn', filter: 'all', order: 0, addedDate: ''},
-        {id: todolistId2, title: 'What to buy', filter: 'all', order: 0, addedDate: ''},
+        {id: todolistId1, title: 'What to learn', filter: 'all', order: 0, addedDate: '', fetchStatus: 'idle'},
+        {id: todolistId2, title: 'What to buy', filter: 'all', order: 0, addedDate: '', fetchStatus: 'idle'},
     ],
     app: {
         error: '',
@@ -121,7 +121,7 @@ const rootReducer = combineReducers({
     app: appStatusReducer,
 })
 
-const storyBookStore = createStore(rootReducer, initGlobalStore as AppRootStateType,applyMiddleware(thunk))
+const storyBookStore = createStore(rootReducer, initGlobalStore as AppRootStateType, applyMiddleware(thunk))
 
 export const ReduxProviderDecorator = (storyFn: any) => {
     return <Provider store={storyBookStore}>{storyFn()}</Provider>

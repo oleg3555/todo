@@ -5,6 +5,7 @@ import React, {ChangeEvent, useCallback} from "react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import {TaskStatuses} from "../../../../api/todolists-api";
 import {taskType} from "../../Todolists";
+import {itemFetchStatus} from "../../../../redux/reducers/taskReducer";
 
 type propsType = {
     task: taskType,
@@ -28,12 +29,18 @@ export const Task = React.memo((props: propsType) => {
         props.changeTaskTitle(id, title);
     }, [props.changeTaskTitle, id]);
 
-    if (fetchStatus === 'removing') {
-        return null;
+    const getStatusItem = (type: itemFetchStatus) => {
+        if (type === 'idle') {
+            return <Checkbox checked={status === TaskStatuses.Completed} onChange={changeStatusHandler}/>;
+        } else if (type === 'failed') {
+            return <ErrorOutlineIcon/>;
+        } else {
+            return <CircularProgress/>;
+        }
     }
 
     return (
-        <div className={status === TaskStatuses.Completed ? 'is-done' : ''}>
+        <div>
             <Grid
                 container
                 direction="row"
@@ -41,17 +48,13 @@ export const Task = React.memo((props: propsType) => {
                 spacing={2}
             >
                 <Grid item xs={2}>
-                    {fetchStatus === 'idle' &&
-                        <Checkbox checked={status === TaskStatuses.Completed} onChange={changeStatusHandler}/>}
-                    {fetchStatus === 'updating' && <CircularProgress/>}
-                    {fetchStatus === 'failed' && <ErrorOutlineIcon/>}
+                    {getStatusItem(fetchStatus)}
                 </Grid>
-                <Grid item>
-                    {fetchStatus === 'idle' ? (<>
-                        <EditableSpan title={title} changeTitle={changeTitleHandler}/>
-                        <IconButton onClick={removeHandler}>
-                            <DeleteForeverIcon/>
-                        </IconButton></>) : (<span>{title}</span>)}
+                <Grid item className={fetchStatus !== 'idle' ? 'disabled' : undefined}>
+                    <EditableSpan title={title} changeTitle={changeTitleHandler}/>
+                    <IconButton onClick={removeHandler}>
+                        <DeleteForeverIcon/>
+                    </IconButton>
                 </Grid>
             </Grid>
         </div>

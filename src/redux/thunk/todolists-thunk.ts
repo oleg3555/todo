@@ -1,13 +1,14 @@
 import {Dispatch} from "redux";
 import {todolistsAPI} from "../../api/todolists-api";
 import {
-    addTodolistAC,
+    addTodolistAC, changeTodolistFetchStatusAC,
     changeTodolistTitleAC,
     removeTodolistAC,
     setTodolistsAC,
     todolistActionsType
 } from "../reducers/todolistReducer";
 import {disableAppLoaderAC, enableAppLoaderAC, appStatusActionsType} from "../reducers/appStatusReducer";
+import {handleAppError, handleServerError} from "./utils/errorHandlers";
 
 export const setTodolistsTC = () => {
     return async (dispatch: Dispatch<todolistActionsType | appStatusActionsType>) => {
@@ -15,8 +16,8 @@ export const setTodolistsTC = () => {
         try {
             const response = await todolistsAPI.getTodolists();
             dispatch(setTodolistsAC(response.data));
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            handleServerError(dispatch, error.message);
         }
         dispatch(disableAppLoaderAC());
     }
@@ -27,10 +28,15 @@ export const createTodolistTC = (title: string) => {
         dispatch(enableAppLoaderAC());
         try {
             const response = await todolistsAPI.createTodolist(title);
-            const {item} = response.data.data;
-            dispatch(addTodolistAC(item));
-        } catch (error) {
-            console.error(error);
+            const {data} = response;
+            if (!data.resultCode) {
+                const {item} = data.data;
+                dispatch(addTodolistAC(item));
+            } else {
+                handleAppError(dispatch, data);
+            }
+        } catch (error: any) {
+            handleServerError(dispatch, error.message);
         }
         dispatch(disableAppLoaderAC());
     }
@@ -38,26 +44,39 @@ export const createTodolistTC = (title: string) => {
 
 export const removeTodolistTC = (todolistId: string) => {
     return async (dispatch: Dispatch<todolistActionsType | appStatusActionsType>) => {
-        dispatch(enableAppLoaderAC());
+        dispatch(changeTodolistFetchStatusAC(todolistId, 'removing'));
         try {
-            await todolistsAPI.removeTodolist(todolistId);
-            dispatch(removeTodolistAC(todolistId));
-        } catch (error) {
-            console.error(error);
+            const response = await todolistsAPI.removeTodolist(todolistId);
+            const {data} = response;
+            if (!data.resultCode) {
+                dispatch(removeTodolistAC(todolistId));
+            } else {
+                dispatch(changeTodolistFetchStatusAC(todolistId, 'failed'));
+                handleAppError(dispatch, data);
+            }
+        } catch (error: any) {
+            dispatch(changeTodolistFetchStatusAC(todolistId, 'failed'));
+            handleServerError(dispatch, error.message);
         }
-        dispatch(disableAppLoaderAC());
     }
 }
 
 export const changeTodolistTitleTC = (todolistId: string, title: string) => {
     return async (dispatch: Dispatch<todolistActionsType | appStatusActionsType>) => {
-        dispatch(enableAppLoaderAC());
+        dispatch(changeTodolistFetchStatusAC(todolistId, 'updating'));
         try {
-            await todolistsAPI.updateTodolist(todolistId, title);
-            dispatch(changeTodolistTitleAC(todolistId, title));
-        } catch (error) {
-            console.error(error);
+            const response = await todolistsAPI.updateTodolist(todolistId, title);
+            const {data} = response;
+            if (!data.resultCode) {
+                dispatch(changeTodolistTitleAC(todolistId, title));
+                dispatch(changeTodolistFetchStatusAC(todolistId, 'idle'));
+            } else {
+                dispatch(changeTodolistFetchStatusAC(todolistId, 'failed'));
+                handleAppError(dispatch, data);
+            }
+        } catch (error: any) {
+            dispatch(changeTodolistFetchStatusAC(todolistId, 'failed'));
+            handleServerError(dispatch, error.message);
         }
-        dispatch(disableAppLoaderAC());
     }
 }

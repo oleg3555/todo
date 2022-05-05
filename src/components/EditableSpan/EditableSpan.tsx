@@ -1,4 +1,4 @@
-import {useState, KeyboardEvent, ChangeEvent} from "react";
+import {useState, KeyboardEvent, ChangeEvent, useEffect} from "react";
 import React from "react";
 import {TextField} from "@mui/material";
 
@@ -13,6 +13,7 @@ export const EditableSpan = React.memo((props: propsType) => {
 
     const enableEditMode = () => {
         setEditMode(true);
+        setInputValue(props.title);
     }
 
     const changeTitle = () => {
@@ -20,7 +21,6 @@ export const EditableSpan = React.memo((props: propsType) => {
         if (newTitle) {
             props.changeTitle(newTitle);
             setEditMode(false);
-            setInputValue(props.title);
         }
     }
 

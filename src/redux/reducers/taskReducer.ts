@@ -8,7 +8,7 @@ type changeTaskTitleType = ReturnType<typeof changeTaskTitleAC>
 type changeTaskStatusType = ReturnType<typeof changeTaskStatusAC>
 type setTasksType = ReturnType<typeof setTasksAC>
 type changeTaskFetchStatus = ReturnType<typeof changeTaskFetchStatusAC>
-export type taskFetchStatus = 'updating' | 'removing' | 'idle' | 'failed';
+export type itemFetchStatus = 'updating' | 'removing' | 'idle' | 'failed';
 
 export type taskActionsType =
     addTaskType
@@ -80,7 +80,7 @@ export const taskReducer = (state: tasksStateType = initialState, action: taskAc
 }
 
 
-export const changeTaskFetchStatusAC = (todoListId: string, taskId: string, fetchStatus: taskFetchStatus) => {
+export const changeTaskFetchStatusAC = (todoListId: string, taskId: string, fetchStatus: itemFetchStatus) => {
     return {type: 'CHANGE-TASK-FETCH-STATUS', payload: {todoListId, taskId, fetchStatus}} as const;
 }
 

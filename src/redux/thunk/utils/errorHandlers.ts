@@ -4,7 +4,7 @@ import {appStatusActionsType, setAppErrorAC} from "../../reducers/appStatusReduc
 
 export const defaultErrorMessage: string = 'Something went wrong!';
 
-export const handleAppError=<D>(dispatch:Dispatch<appStatusActionsType>,res:ResponseType<D>)=>{
+export const handleAppError = <D>(dispatch: Dispatch<appStatusActionsType>, res: ResponseType<D>) => {
     if (res.messages.length) {
         dispatch(setAppErrorAC(res.messages[0]));
     } else {
@@ -12,7 +12,7 @@ export const handleAppError=<D>(dispatch:Dispatch<appStatusActionsType>,res:Resp
     }
 }
 
-export const handleServerError=(dispatch:Dispatch<appStatusActionsType>,message:string)=>{
-    dispatch(setAppErrorAC(message));
+export const handleServerError = (dispatch: Dispatch<appStatusActionsType>, message: string) => {
+    dispatch(setAppErrorAC(message ? message : defaultErrorMessage));
     console.error(message);
 }
