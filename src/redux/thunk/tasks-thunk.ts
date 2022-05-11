@@ -9,7 +9,7 @@ import {
     taskActionsType
 } from "../reducers/taskReducer";
 import {AppRootStateType} from "../store";
-import {appStatusActionsType, disableAppErrorAC, setAppErrorAC} from "../reducers/appStatusReducer";
+import {appStatusActionsType, setAppErrorAC} from "../reducers/appStatusReducer";
 import {taskType} from "../../pages/Todolists/Todolists";
 import {handleAppError, handleServerError} from "./utils/errorHandlers";
 import {changeTodolistFetchStatusAC, todolistActionsType} from "../reducers/todolistReducer";
@@ -18,14 +18,12 @@ export const setTasksTC = (todolistId: string) => {
     return async (dispatch: Dispatch<taskActionsType | appStatusActionsType | todolistActionsType>) => {
         dispatch(changeTodolistFetchStatusAC(todolistId, 'updating'));
         try {
-            const response = await todolistsAPI.getTasks(todolistId);
-            const {data} = response;
-            if (!data.error) {
-                const {items} = response.data;
+            const {data: {error, items}} = await todolistsAPI.getTasks(todolistId);
+            if (!error) {
                 dispatch(setTasksAC(todolistId, items));
                 dispatch(changeTodolistFetchStatusAC(todolistId, 'idle'));
             } else {
-                dispatch(setAppErrorAC(data.error));
+                dispatch(setAppErrorAC(error));
                 dispatch(changeTodolistFetchStatusAC(todolistId, 'failed'));
             }
         } catch (error: any) {
@@ -39,11 +37,9 @@ export const addTaskTC = (todolistId: string, title: string) => {
     return async (dispatch: Dispatch<taskActionsType | appStatusActionsType | todolistActionsType>) => {
         dispatch(changeTodolistFetchStatusAC(todolistId, 'updating'));
         try {
-            const response = await todolistsAPI.addTask(todolistId, title);
-            const {data} = response;
+            const {data} = await todolistsAPI.addTask(todolistId, title);
             if (!data.resultCode) {
-                const {item} = data.data;
-                dispatch(addTaskAC(item));
+                dispatch(addTaskAC(data.data.item));
                 dispatch(changeTodolistFetchStatusAC(todolistId, 'idle'));
             } else {
                 dispatch(changeTodolistFetchStatusAC(todolistId, 'failed'));
@@ -60,8 +56,7 @@ export const removeTaskTC = (todolistId: string, taskId: string) => {
     return async (dispatch: Dispatch<taskActionsType | appStatusActionsType>) => {
         dispatch(changeTaskFetchStatusAC(todolistId, taskId, 'removing'));
         try {
-            const response = await todolistsAPI.removeTask(todolistId, taskId);
-            const {data} = response;
+            const {data} = await todolistsAPI.removeTask(todolistId, taskId);
             if (!data.resultCode) {
                 dispatch(removeTaskAC(todolistId, taskId));
             } else {
@@ -86,8 +81,7 @@ export const changeTaskStatusTC = (todolistId: string, taskId: string, status: T
             return;
         }
         try {
-            const response = await todolistsAPI.updateTask(todolistId, taskId, {...task, status});
-            const {data} = response;
+            const {data} = await todolistsAPI.updateTask(todolistId, taskId, {...task, status});
             if (!data.resultCode) {
                 dispatch(changeTaskStatusAC(todolistId, taskId, status));
             } else {
@@ -112,8 +106,7 @@ export const changeTaskTitleTC = (todolistId: string, taskId: string, title: str
             return;
         }
         try {
-            const response = await todolistsAPI.updateTask(todolistId, taskId, {...task, title});
-            const {data} = response;
+            const {data} = await todolistsAPI.updateTask(todolistId, taskId, {...task, title});
             if (!data.resultCode) {
                 dispatch(changeTaskTitleAC(todolistId, taskId, title));
             } else {

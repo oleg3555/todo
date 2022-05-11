@@ -13,9 +13,9 @@ import {clearDataAC, clearDataType} from "../reducers/taskReducer";
 export const loginTC = (data: loginDataType) => async (dispatch: Dispatch<appStatusActionsType>) => {
     dispatch(enableAppLoaderAC());
     try {
-        const response = await authAPI.login(data);
-        if (response.data.resultCode) {
-            handleAppError(dispatch, response.data);
+        const {data: res} = await authAPI.login(data);
+        if (res.resultCode) {
+            handleAppError(dispatch, res);
         } else {
             dispatch(setLoggedStatusAC(true));
         }
@@ -27,8 +27,8 @@ export const loginTC = (data: loginDataType) => async (dispatch: Dispatch<appSta
 
 export const checkAuthTC = () => async (dispatch: Dispatch<appStatusActionsType>) => {
     try {
-        const response = await authAPI.checkAuth();
-        if (!response.data.resultCode) {
+        const {data: {resultCode}} = await authAPI.checkAuth();
+        if (!resultCode) {
             dispatch(setLoggedStatusAC(true));
         }
     } catch (error: any) {
@@ -40,12 +40,12 @@ export const checkAuthTC = () => async (dispatch: Dispatch<appStatusActionsType>
 export const logOutTC = () => async (dispatch: Dispatch<appStatusActionsType | clearDataType>) => {
     dispatch(enableAppLoaderAC());
     try {
-        const response = await authAPI.logOut();
-        if (!response.data.resultCode) {
+        const {data} = await authAPI.logOut();
+        if (!data.resultCode) {
             dispatch(setLoggedStatusAC(false));
             dispatch(clearDataAC());
         } else {
-            handleAppError(dispatch, response.data);
+            handleAppError(dispatch, data);
         }
     } catch (error: any) {
         handleServerError(dispatch, error.message);

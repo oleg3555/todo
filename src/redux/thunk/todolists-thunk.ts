@@ -14,8 +14,8 @@ export const setTodolistsTC = () => {
     return async (dispatch: Dispatch<todolistActionsType | appStatusActionsType>) => {
         dispatch(enableAppLoaderAC());
         try {
-            const response = await todolistsAPI.getTodolists();
-            dispatch(setTodolistsAC(response.data));
+            const {data} = await todolistsAPI.getTodolists();
+            dispatch(setTodolistsAC(data));
         } catch (error: any) {
             handleServerError(dispatch, error.message);
         }
@@ -27,11 +27,9 @@ export const createTodolistTC = (title: string) => {
     return async (dispatch: Dispatch<todolistActionsType | appStatusActionsType>) => {
         dispatch(enableAppLoaderAC());
         try {
-            const response = await todolistsAPI.createTodolist(title);
-            const {data} = response;
+            const {data} = await todolistsAPI.createTodolist(title);
             if (!data.resultCode) {
-                const {item} = data.data;
-                dispatch(addTodolistAC(item));
+                dispatch(addTodolistAC(data.data.item));
             } else {
                 handleAppError(dispatch, data);
             }
@@ -46,8 +44,7 @@ export const removeTodolistTC = (todolistId: string) => {
     return async (dispatch: Dispatch<todolistActionsType | appStatusActionsType>) => {
         dispatch(changeTodolistFetchStatusAC(todolistId, 'removing'));
         try {
-            const response = await todolistsAPI.removeTodolist(todolistId);
-            const {data} = response;
+            const {data} = await todolistsAPI.removeTodolist(todolistId);
             if (!data.resultCode) {
                 dispatch(removeTodolistAC(todolistId));
             } else {
@@ -65,8 +62,7 @@ export const changeTodolistTitleTC = (todolistId: string, title: string) => {
     return async (dispatch: Dispatch<todolistActionsType | appStatusActionsType>) => {
         dispatch(changeTodolistFetchStatusAC(todolistId, 'updating'));
         try {
-            const response = await todolistsAPI.updateTodolist(todolistId, title);
-            const {data} = response;
+            const {data} = await todolistsAPI.updateTodolist(todolistId, title);
             if (!data.resultCode) {
                 dispatch(changeTodolistTitleAC(todolistId, title));
                 dispatch(changeTodolistFetchStatusAC(todolistId, 'idle'));
