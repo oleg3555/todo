@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {ResponseType} from '../../../api/todolists-api'
+import {ResponseType} from '../../../api/api'
 import {appStatusActionsType, setAppErrorAC} from "../../reducers/appStatusReducer";
 
 export const defaultErrorMessage: string = 'Something went wrong!';

@@ -11,7 +11,7 @@ import {
 import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
-import {apiTaskType} from "../../api/todolists-api";
+import {apiTaskType} from "../../api/api";
 import {itemFetchStatus} from "../../redux/reducers/taskReducer";
 
 export type taskType = apiTaskType & {
@@ -22,8 +22,7 @@ export type tasksStateType = {
     [key: string]: Array<taskType>,
 }
 
-
-export function Todolists() {
+export const Todolists = () => {
     const dispatch = useDispatch();
     const todolists = useSelector<AppRootStateType, Array<TodolistType>>(state => state.todolists);
 

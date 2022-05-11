@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, taskReducer} from "../reducers/taskReducer";
-import {TaskPriorities, TaskStatuses, apiTaskType} from "../../api/todolists-api";
+import {TaskPriorities, TaskStatuses, apiTaskType} from "../../api/api";
 import {tasksStateType, taskType} from "../../pages/Todolists/Todolists";
 
 const testTaskId = v1();

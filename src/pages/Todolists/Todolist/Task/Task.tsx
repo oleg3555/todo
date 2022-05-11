@@ -3,7 +3,7 @@ import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import React, {ChangeEvent, useCallback} from "react";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import {TaskStatuses} from "../../../../api/todolists-api";
+import {TaskStatuses} from "../../../../api/api";
 import {taskType} from "../../Todolists";
 import {itemFetchStatus} from "../../../../redux/reducers/taskReducer";
 

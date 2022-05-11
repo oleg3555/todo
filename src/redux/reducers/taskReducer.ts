@@ -1,5 +1,5 @@
 import {addTodoType, removeTodoType, setTodolistsType} from "./todolistReducer";
-import {apiTaskType, TaskStatuses} from "../../api/todolists-api";
+import {apiTaskType, TaskStatuses} from "../../api/api";
 import {tasksStateType, taskType} from "../../pages/Todolists/Todolists";
 
 type addTaskType = ReturnType<typeof addTaskAC>
@@ -8,12 +8,14 @@ type changeTaskTitleType = ReturnType<typeof changeTaskTitleAC>
 type changeTaskStatusType = ReturnType<typeof changeTaskStatusAC>
 type setTasksType = ReturnType<typeof setTasksAC>
 type changeTaskFetchStatus = ReturnType<typeof changeTaskFetchStatusAC>
+export type clearDataType = ReturnType<typeof clearDataAC>
 export type itemFetchStatus = 'updating' | 'removing' | 'idle' | 'failed';
 
 export type taskActionsType =
     addTaskType
     | removeTaskType
     | setTasksType
+    | clearDataType
     | changeTaskTitleType
     | changeTaskStatusType
     | addTodoType
@@ -73,12 +75,18 @@ export const taskReducer = (state: tasksStateType = initialState, action: taskAc
             const updatedTasks = state[todoListId].map(item => item.id === taskId ? {...item, fetchStatus} : item);
             return {...state, [todoListId]: updatedTasks};
         }
+        case "CLEAR-DATA": {
+            return {};
+        }
         default: {
             return state;
         }
     }
 }
 
+export const clearDataAC = () => {
+    return {type: 'CLEAR-DATA'} as const;
+}
 
 export const changeTaskFetchStatusAC = (todoListId: string, taskId: string, fetchStatus: itemFetchStatus) => {
     return {type: 'CHANGE-TASK-FETCH-STATUS', payload: {todoListId, taskId, fetchStatus}} as const;

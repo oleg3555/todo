@@ -6,7 +6,7 @@ import {
     removeTodolistAC, setTodolistsAC,
     todolistReducer, TodolistType
 } from "../reducers/todolistReducer";
-import {apiTodolistType} from "../../api/todolists-api";
+import {apiTodolistType} from "../../api/api";
 
 test("new todolist should be added", () => {
     const id = v1();

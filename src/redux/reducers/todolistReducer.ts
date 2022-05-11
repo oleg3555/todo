@@ -1,5 +1,5 @@
-import {apiTodolistType} from "../../api/todolists-api";
-import {itemFetchStatus} from "./taskReducer";
+import {apiTodolistType} from "../../api/api";
+import {clearDataType, itemFetchStatus} from "./taskReducer";
 
 export type addTodoType = ReturnType<typeof addTodolistAC>
 type changeTodoFilterType = ReturnType<typeof changeTodolistFilterAC>
@@ -11,6 +11,7 @@ type changeTodolistFetchStatus = ReturnType<typeof changeTodolistFetchStatusAC>
 export type todolistActionsType =
     addTodoType
     | changeTodoFilterType
+    | clearDataType
     | removeTodoType
     | changeTodolistFetchStatus
     | changeTodoTitleType
@@ -50,6 +51,9 @@ export const todolistReducer = (state: Array<TodolistType> = initialState, actio
         case "CHANGE-TODOLIST-FETCH-STATUS": {
             const {id, fetchStatus} = action.payload;
             return state.map(item => item.id === id ? {...item, fetchStatus} : item);
+        }
+        case "CLEAR-DATA": {
+            return [];
         }
         default: {
             return state;

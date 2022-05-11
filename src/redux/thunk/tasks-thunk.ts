@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {TaskStatuses, todolistsAPI} from "../../api/todolists-api";
+import {TaskStatuses, todolistsAPI} from "../../api/api";
 import {
     addTaskAC, changeTaskFetchStatusAC,
     changeTaskStatusAC,
@@ -9,7 +9,7 @@ import {
     taskActionsType
 } from "../reducers/taskReducer";
 import {AppRootStateType} from "../store";
-import {appStatusActionsType, setAppErrorAC} from "../reducers/appStatusReducer";
+import {appStatusActionsType, disableAppErrorAC, setAppErrorAC} from "../reducers/appStatusReducer";
 import {taskType} from "../../pages/Todolists/Todolists";
 import {handleAppError, handleServerError} from "./utils/errorHandlers";
 import {changeTodolistFetchStatusAC, todolistActionsType} from "../reducers/todolistReducer";

@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../../redux/store";
 import {Task} from "./Task/Task";
 import {filterType} from "../../../redux/reducers/todolistReducer";
-import {TaskStatuses} from "../../../api/todolists-api";
+import {TaskStatuses} from "../../../api/api";
 import {
     addTaskTC,
     changeTaskStatusTC,
@@ -99,7 +99,8 @@ export const Todolist = React.memo((props: propsType) => {
                 </Grid>
             </Grid>
             <div style={{margin: '0.5rem 0'}}>
-                <AddItemForm addItem={addTask}/>
+                <AddItemForm addItem={addTask}
+                             disabled={props.fetchStatus !== 'idle'}/>
             </div>
             {tasks.map(task => <Task key={task.id}
                                      task={task}

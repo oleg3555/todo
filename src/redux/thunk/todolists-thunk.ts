@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {todolistsAPI} from "../../api/todolists-api";
+import {todolistsAPI} from "../../api/api";
 import {
     addTodolistAC, changeTodolistFetchStatusAC,
     changeTodolistTitleAC,

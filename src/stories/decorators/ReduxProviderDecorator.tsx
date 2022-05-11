@@ -5,7 +5,7 @@ import {taskReducer} from "../../redux/reducers/taskReducer";
 import {AppRootStateType} from "../../redux/store";
 import React from "react";
 import {Provider} from "react-redux";
-import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
+import {TaskPriorities, TaskStatuses} from "../../api/api";
 import {appStatusReducer, appStatusStateType} from "../../redux/reducers/appStatusReducer";
 import thunk from "redux-thunk";
 import {tasksStateType} from "../../pages/Todolists/Todolists";
@@ -112,6 +112,8 @@ const initGlobalStore: storeType = {
     app: {
         error: '',
         isFetching: false,
+        isInitialized: false,
+        isUserAuth: false,
     }
 }
 
