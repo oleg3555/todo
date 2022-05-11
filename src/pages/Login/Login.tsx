@@ -8,11 +8,8 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {emailRegular} from "../../utils/regulars";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {loginTC} from "../../redux/thunk/login-thunk";
-import {AppRootStateType} from "../../redux/store";
-import {appStatusStateType} from "../../redux/reducers/appStatusReducer";
-import {Navigate} from 'react-router-dom';
 
 
 type errorsType = {
@@ -82,7 +79,7 @@ export const Login = () => {
                 <FormLabel>
                     <p>To log in get registered
                         <a href='https://social-network.samuraijs.com/'
-                           target='_blank'> here
+                           target='_blank' rel='noopener noreferrer'> here
                         </a>
                     </p>
                     <p>or use common test account credentials:</p>

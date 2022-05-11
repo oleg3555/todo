@@ -19,15 +19,15 @@ export const Task = React.memo((props: propsType) => {
 
     const removeHandler = useCallback(() => {
         props.removeTask(id);
-    }, [props.removeTask, id]);
+    }, [props, id]);
 
     const changeStatusHandler = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         props.changeTaskStatus(id, event.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New);
-    }, [props.changeTaskStatus, id]);
+    }, [props, id]);
 
     const changeTitleHandler = useCallback((title: string) => {
         props.changeTaskTitle(id, title);
-    }, [props.changeTaskTitle, id]);
+    }, [props, id]);
 
     const getStatusItem = (type: itemFetchStatus) => {
         if (type === 'idle') {

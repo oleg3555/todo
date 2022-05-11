@@ -37,7 +37,7 @@ export const Todolist = React.memo((props: propsType) => {
 
     useEffect(() => {
         dispatch(setTasksTC(props.id));
-    }, [])
+    }, [dispatch, props.id])
 
     let tasks = allTasks;
     if (props.filter === 'active') {
@@ -49,15 +49,15 @@ export const Todolist = React.memo((props: propsType) => {
     const changeTodolistFilter = useCallback((event: MouseEvent<HTMLButtonElement>) => {
         const {dataset} = event.target as HTMLButtonElement;
         props.changeTodolistFilter(props.id, dataset.id as filterType);
-    }, [props.changeTodolistFilter, props.id]);
+    }, [props]);
 
     const removeTodolist = useCallback(() => {
         props.removeTodolist(props.id);
-    }, [props.removeTodolist, props.id]);
+    }, [props]);
 
     const changeTodolistTitle = useCallback((title: string) => {
         props.changeTodolistTitle(props.id, title);
-    }, [props.changeTodolistTitle, props.id]);
+    }, [props]);
 
     const addTask = useCallback((title: string) => {
         dispatch(addTaskTC(props.id, title));

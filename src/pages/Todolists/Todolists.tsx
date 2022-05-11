@@ -28,7 +28,7 @@ export const Todolists = () => {
 
     useEffect(() => {
         dispatch(setTodolistsTC());
-    }, []);
+    }, [dispatch]);
 
     const changeTodolistFilter = useCallback((todoListId: string, value: filterType) => {
         dispatch(changeTodolistFilterAC(todoListId, value));
